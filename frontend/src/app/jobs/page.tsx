@@ -1,5 +1,5 @@
 "use client";
-
+import Link from "next/link";
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import {
   BriefcaseBusiness,
@@ -100,14 +100,14 @@ export default function JobsPage() {
     } catch (error: unknown) {
       const message =
         typeof error === "object" &&
-        error !== null &&
-        "response" in error &&
-        typeof error.response === "object" &&
-        error.response !== null &&
-        "data" in error.response &&
-        typeof error.response.data === "object" &&
-        error.response.data !== null &&
-        "message" in error.response.data
+          error !== null &&
+          "response" in error &&
+          typeof error.response === "object" &&
+          error.response !== null &&
+          "data" in error.response &&
+          typeof error.response.data === "object" &&
+          error.response.data !== null &&
+          "message" in error.response.data
           ? String(error.response.data.message)
           : "Unable to create job. Please try again.";
 
@@ -295,9 +295,10 @@ export default function JobsPage() {
         ) : (
           <div className="divide-y divide-slate-100">
             {filteredJobs.map((job) => (
-              <article
+              <Link
                 key={job.id}
-                className="flex flex-col justify-between gap-4 p-5 transition hover:bg-slate-50 sm:flex-row sm:items-center"
+                href={`/jobs/${job.id}`}
+                className="flex flex-col justify-between gap-4 p-5 transition hover:bg-indigo-50/40 sm:flex-row sm:items-center"
               >
                 <div className="flex items-start gap-4">
                   <div className="rounded-xl bg-indigo-50 p-3 text-indigo-600">
@@ -322,16 +323,14 @@ export default function JobsPage() {
                 </div>
 
                 <span
-                  className={`w-fit rounded-full px-3 py-1.5 text-xs font-semibold ${
-                    job.status === "OPEN"
-                      ? "bg-emerald-50 text-emerald-700"
-                      : "bg-slate-100 text-slate-600"
-                  }`}
+                  className={`w-fit rounded-full px-3 py-1.5 text-xs font-semibold ${job.status === "OPEN"
+                    ? "bg-emerald-50 text-emerald-700"
+                    : "bg-slate-100 text-slate-600"
+                    }`}
                 >
                   {job.status === "OPEN" ? "Open" : "Closed"}
                 </span>
-              </article>
-            ))}
+              </Link>))}
           </div>
         )}
       </section>

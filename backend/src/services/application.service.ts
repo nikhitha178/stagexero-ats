@@ -89,3 +89,81 @@ export async function updateApplicationStage(applicationId: string, nextStage: A
     throw error;
   }
 }
+
+export async function confirmJobApplicationStage(
+  jobId: string,
+  applicationId: string,
+  nextStage: ApplicationStage
+) {
+  try {
+    return await prisma.$transaction(
+      async (tx) => {
+        const application = await tx.application.findUnique({
+          where: { id: applicationId },
+          include: { candidate: true },
+        });
+
+        if (!application || application.jobId !== jobId) {
+          throw new AppError(
+            "Application not found for this job.",
+            404
+          );
+        }
+
+        const transition = validateStageTransition(
+          application.stage,
+          nextStage
+        );
+
+        if (!transition.valid) {
+          throw new AppError(transition.message, 400);
+        }
+
+        // Confirm the application still has the expected stage.
+        const result = await tx.application.updateMany({
+          where: {
+            id: applicationId,
+            jobId,
+            stage: application.stage,
+          },
+          data: {
+            stage: nextStage,
+          },
+        });
+
+        if (result.count !== 1) {
+          throw new AppError(
+            "The application stage changed concurrently. Refresh and try again.",
+            409
+          );
+        }
+
+        const updated = await tx.application.findUniqueOrThrow({
+          where: { id: applicationId },
+          include: { candidate: true },
+        });
+
+        return {
+          application: updated,
+          previousStage: application.stage,
+          newStage: nextStage,
+        };
+      },
+      {
+        isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+      }
+    );
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2034"
+    ) {
+      throw new AppError(
+        "The application stage changed concurrently. Refresh and try again.",
+        409
+      );
+    }
+
+    throw error;
+  }
+}

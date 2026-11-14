@@ -8,7 +8,6 @@ import {
   FileText,
   ArrowUpRight,
   Plus,
-  Clock3,
   Sparkles,
 } from "lucide-react";
 import api from "@/lib/api";
@@ -195,19 +194,39 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-indigo-100 bg-gradient-to-br from-indigo-50 to-white p-6">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-600 text-white">
-            <Sparkles size={21} />
+        ```tsx
+        <Link
+          href="/jobs"
+          className="block rounded-2xl border border-indigo-100 bg-gradient-to-br from-indigo-50 to-white p-6 transition hover:border-indigo-300 hover:shadow-md"
+        >
+          <div className="flex items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-600 text-white">
+              <Sparkles size={21} />
+            </div>
+
+            <div>
+              <h2 className="text-lg font-semibold text-slate-900">
+                AI Recruiting Assistant
+              </h2>
+              <p className="text-sm text-slate-500">
+                Your AI-powered recruitment copilot
+              </p>
+            </div>
           </div>
-          <h2 className="mt-5 text-lg font-semibold text-slate-900">AI recruiting assistant</h2>
-          <p className="mt-2 text-sm leading-6 text-slate-600">
-            Soon, you&apos;ll be able to search candidates and propose pipeline updates using natural language.
+
+          <p className="mt-4 text-sm leading-6 text-slate-600">
+            Search candidates, check application stages, and propose
+            pipeline updates using natural language.
           </p>
-          <div className="mt-5 inline-flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-xs font-semibold text-indigo-700 shadow-sm">
-            <Clock3 size={14} />
-            Coming in the next phase
+
+          <div className="mt-5 flex items-center justify-between">
+            <span className="text-sm font-semibold text-indigo-700">
+              Open AI Copilot
+            </span>
+            <ArrowUpRight size={18} className="text-indigo-600" />
           </div>
-        </div>
+        </Link>
+        ```
       </section>
 
       <section className="rounded-2xl border border-slate-200 bg-white">

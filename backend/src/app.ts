@@ -9,7 +9,11 @@ export const app = express();
 app.disable("x-powered-by");
 app.use(
     cors({
-        origin: [env.FRONTEND_URL, "http://localhost:3002"],
+        origin: [
+            env.FRONTEND_URL,
+            "http://localhost:3001",
+            "http://localhost:3002",
+        ],
     })
 );
 app.use(express.json({ limit: "32kb" }));
