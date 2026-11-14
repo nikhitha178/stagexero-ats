@@ -323,7 +323,8 @@ npm run dev:frontend
 
 The backend runs at `http://localhost:5000`.
 
-The frontend normally runs at `http://localhost:3000`. If that port is occupied, Next.js may use another available port.
+The frontend normally runs at http://localhost:3000.
+If port 3000 is occupied, use port 3001 or 3002, which are also permitted by the backend CORS configuration.
 
 ## Seed Data
 
